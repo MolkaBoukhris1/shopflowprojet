@@ -1,0 +1,139 @@
+<!-- src/app/pages/produits/produits.component.html -->
+
+<div class="page-wrapper">
+
+  <!-- HERO -->
+  <div class="hero">
+    <h1>Nos Produits</h1>
+    <p>Découvrez notre catalogue complet — {{ totalElements }} produit(s)</p>
+  </div>
+
+  <div class="page-container">
+
+    <!-- FILTRES -->
+    <div class="filters-bar">
+      <mat-form-field appearance="outline" class="search-field">
+        <mat-label>Rechercher un produit...</mat-label>
+        <input matInput [formControl]="searchCtrl">
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="cat-field">
+        <mat-label>Catégorie</mat-label>
+        <mat-select [formControl]="catCtrl">
+          <mat-option [value]="null">Toutes</mat-option>
+          <mat-option *ngFor="let c of categories" [value]="c.id">
+            {{ c.nom }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <button mat-raised-button class="add-btn"
+              routerLink="/product-form"
+              *ngIf="auth.isAdmin || auth.isSeller">
+        <mat-icon>add</mat-icon> Nouveau produit
+      </button>
+    </div>
+
+    <!-- SPINNER -->
+    <div class="spinner-center" *ngIf="loading">
+      <mat-spinner></mat-spinner>
+    </div>
+
+    <!-- GRILLE -->
+    <div class="products-grid" *ngIf="!loading">
+
+      <mat-card class="product-card" *ngFor="let p of products">
+
+        <div class="card-img-wrapper">
+          <img [src]="p.images || 'assets/no-image.png'" [alt]="p.nom">
+
+          <!-- Badge promo -->
+          <span class="promo-badge" *ngIf="p.prixPromo">
+            -{{ p.remisePourcentage | number:'1.0-0' }}%
+          </span>
+
+          <span class="out-badge" *ngIf="p.stock === 0">Rupture</span>
+        </div>
+
+        <mat-card-content>
+          <!-- Catégories (relation ShopFlow) -->
+          <div class="cats-row">
+            <span class="cat-badge" *ngFor="let c of p.categories">
+              {{ c.nom }}
+            </span>
+          </div>
+
+          <h3 class="prod-name">{{ p.nom }}</h3>
+          <p class="prod-desc">{{ p.description | slice:0:80 }}...</p>
+
+          <!-- Note -->
+          <div class="rating-row" *ngIf="p.noteMoyenne">
+            <span class="stars">
+              <mat-icon *ngFor="let s of [1,2,3,4,5]"
+                        [class.filled]="s <= (p.noteMoyenne || 0)">
+                {{ s <= (p.noteMoyenne || 0) ? 'star' : 'star_border' }}
+              </mat-icon>
+            </span>
+            <span class="note-val">{{ p.noteMoyenne | number:'1.1-1' }}</span>
+          </div>
+
+          <div class="price-row">
+            <div class="price-col">
+              <span class="price-promo" *ngIf="p.prixPromo">
+                {{ p.prixPromo | number:'1.2-2' }} TND
+              </span>
+              <span class="price" [class.striked]="p.prixPromo">
+                {{ p.prix | number:'1.2-2' }} TND
+              </span>
+            </div>
+            <span class="stock" [class.low]="p.stock < 5 && p.stock > 0"
+                                [class.out]="p.stock === 0">
+              Stock: {{ p.stock }}
+            </span>
+          </div>
+        </mat-card-content>
+
+        <mat-card-actions>
+          <button mat-raised-button class="add-to-cart-btn"
+                  [disabled]="p.stock === 0"
+                  (click)="addToCart($event, p)">
+            <mat-icon>add_shopping_cart</mat-icon>
+            {{ p.stock === 0 ? 'Épuisé' : 'Ajouter' }}
+          </button>
+
+          <ng-container *ngIf="auth.isAdmin || auth.isSeller">
+            <button mat-icon-button color="accent"
+                    (click)="editProduct($event, p)" matTooltip="Modifier">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button color="warn"
+                    (click)="deleteProduct($event, p)" matTooltip="Supprimer">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </ng-container>
+        </mat-card-actions>
+
+      </mat-card>
+
+      <!-- Vide -->
+      <div class="empty-state" *ngIf="products.length === 0">
+        <mat-icon>inventory_2</mat-icon>
+        <p>Aucun produit trouvé</p>
+      </div>
+
+    </div>
+
+    <!-- PAGINATION -->
+    <div class="pagination" *ngIf="totalPages > 1">
+      <button mat-icon-button (click)="prevPage()" [disabled]="currentPage === 0">
+        <mat-icon>chevron_left</mat-icon>
+      </button>
+      <span>Page {{ currentPage + 1 }} / {{ totalPages }}</span>
+      <button mat-icon-button (click)="nextPage()" [disabled]="currentPage === totalPages - 1">
+        <mat-icon>chevron_right</mat-icon>
+      </button>
+    </div>
+
+  </div>
+</div>

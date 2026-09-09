@@ -1,0 +1,76 @@
+/* src/styles.css */
+@import '@angular/material/prebuilt-themes/indigo-pink.css';
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', 'Roboto', sans-serif;
+  background-color: #f8f9fe;
+  color: #1a1a2e;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #f1f1f1; }
+::-webkit-scrollbar-thumb { background: #c5c5e8; border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: #3f51b5; }
+
+/* Spinner centré */
+.spinner-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 80px;
+}
+
+/* Snackbars */
+.error-snack {
+  background: linear-gradient(135deg, #f44336, #e53935) !important;
+  color: white !important;
+  border-radius: 12px !important;
+}
+.success-snack {
+  background: linear-gradient(135deg, #4caf50, #43a047) !important;
+  color: white !important;
+  border-radius: 12px !important;
+}
+
+/* Table rows */
+tr.mat-row { transition: background 0.2s; }
+tr.mat-row:hover { background: #f0f2ff; }
+
+/* Badge catégorie */
+.cat-badge {
+  display: inline-block;
+  background: linear-gradient(135deg, #e8eaf6, #c5cae9);
+  color: #3f51b5;
+  padding: 3px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+}
+
+/* Card global */
+mat-card {
+  border-radius: 16px !important;
+  box-shadow: 0 4px 20px rgba(63, 81, 181, 0.08) !important;
+  border: 1px solid rgba(63, 81, 181, 0.06) !important;
+  transition: box-shadow 0.3s ease !important;
+}
+mat-card:hover {
+  box-shadow: 0 8px 32px rgba(63, 81, 181, 0.14) !important;
+}
+
+/* Buttons */
+.mat-raised-button {
+  border-radius: 10px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.3px !important;
+}

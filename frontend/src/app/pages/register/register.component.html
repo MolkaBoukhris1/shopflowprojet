@@ -1,0 +1,109 @@
+<!-- src/app/pages/register/register.component.html -->
+
+<div class="auth-wrapper">
+  <mat-card class="auth-card">
+
+    <div class="auth-logo">
+      <mat-icon>storefront</mat-icon>
+      <h2>ShopFlow</h2>
+    </div>
+
+    <h3 class="auth-title">Créer un compte</h3>
+    <p class="auth-sub">Rejoignez notre communauté</p>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+      <!-- Type de compte -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Type de compte</mat-label>
+        <mat-select formControlName="role">
+          <mat-option value="CUSTOMER">
+            Client — j'achète des produits
+          </mat-option>
+          <mat-option value="SELLER">
+            Vendeur — je vends des produits
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <!-- Nom et Prénom -->
+      <div class="two-col">
+        <mat-form-field appearance="outline">
+          <mat-label>Prénom</mat-label>
+          <input matInput formControlName="prenom">
+          <mat-error *ngIf="form.get('prenom')?.hasError('required')">Obligatoire</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Nom</mat-label>
+          <input matInput formControlName="nom">
+          <mat-error *ngIf="form.get('nom')?.hasError('required')">Obligatoire</mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- Email -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Email</mat-label>
+        <input matInput type="email" formControlName="email">
+        <mat-icon matSuffix>email</mat-icon>
+        <mat-error *ngIf="form.get('email')?.hasError('required')">Obligatoire</mat-error>
+        <mat-error *ngIf="form.get('email')?.hasError('email')">Format invalide</mat-error>
+      </mat-form-field>
+
+      <!-- Mot de passe -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Mot de passe</mat-label>
+        <input matInput type="password" formControlName="password">
+        <mat-error *ngIf="form.get('password')?.hasError('required')">Obligatoire</mat-error>
+        <mat-error *ngIf="form.get('password')?.hasError('minlength')">Min. 6 caractères</mat-error>
+      </mat-form-field>
+
+      <!-- Confirmer -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Confirmer le mot de passe</mat-label>
+        <input matInput type="password" formControlName="confirmPassword">
+        <mat-error *ngIf="form.hasError('passwordMismatch')">
+          Les mots de passe ne correspondent pas
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Champs vendeur (si SELLER sélectionné) -->
+      <ng-container *ngIf="isSeller">
+        <div class="seller-section">
+          <p class="seller-title">
+            Informations de votre boutique
+          </p>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Nom de la boutique</mat-label>
+            <input matInput formControlName="nomBoutique">
+            <mat-icon matSuffix>store</mat-icon>
+            <mat-error *ngIf="form.get('nomBoutique')?.hasError('required')">Obligatoire</mat-error>
+            <mat-error *ngIf="form.get('nomBoutique')?.hasError('minlength')">Min. 3 caractères</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Description de la boutique</mat-label>
+            <textarea matInput formControlName="descriptionBoutique" rows="2"></textarea>
+          </mat-form-field>
+        </div>
+      </ng-container>
+
+      <button mat-raised-button type="submit"
+              class="full-width submit-btn"
+              [disabled]="form.invalid || loading">
+        <mat-spinner diameter="22" *ngIf="loading"
+                     style="display:inline-block;margin-right:8px"></mat-spinner>
+        <span *ngIf="!loading">Créer mon compte</span>
+      </button>
+
+    </form>
+
+    <mat-divider style="margin: 20px 0"></mat-divider>
+
+    <p class="redirect-txt">
+      Déjà un compte ? <a routerLink="/login">Se connecter</a>
+    </p>
+
+  </mat-card>
+</div>

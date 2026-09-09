@@ -1,0 +1,130 @@
+/* src/app/app.component.css */
+
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: linear-gradient(135deg, #0e1535 0%, #220bb7 100%) !important;
+  box-shadow: 0 4px 20px rgba(102, 126, 234, 0.3);
+  height: 64px;
+  padding: 0 24px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: white;
+  text-decoration: none;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+}
+
+.logo mat-icon { font-size: 28px; width: 28px; height: 28px; }
+
+.spacer { flex: 1 1 auto; }
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin: 0 16px;
+}
+
+.nav-links a {
+  color: rgba(255,255,255,0.85) !important;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 10px !important;
+  padding: 6px 14px !important;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.nav-links a:hover {
+  color: white !important;
+  background: rgba(255,255,255,0.15) !important;
+}
+
+.active-link {
+  color: white !important;
+  background: rgba(255,255,255,0.2) !important;
+  font-weight: 600 !important;
+}
+
+/* Badge rôle */
+.role-badge {
+  padding: 3px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  margin-right: 8px;
+  text-transform: uppercase;
+}
+
+.role-badge.admin    { background: #f44336; color: white; }
+.role-badge.seller   { background: #ff9800; color: white; }
+.role-badge.customer { background: #4caf50; color: white; }
+
+/* Menu utilisateur */
+.user-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  background: #f8f9fe;
+  pointer-events: none;
+  min-width: 240px;
+}
+
+.user-avatar { font-size: 44px; width: 44px; height: 44px; color: #667eea; }
+.user-name   { margin: 0; font-weight: 700; font-size: 14px; color: #1a1a2e; }
+.user-role   { margin: 2px 0; font-size: 11px; color: #667eea; font-weight: 700; text-transform: uppercase; }
+.user-email  { margin: 0; font-size: 11px; color: #8892a4; }
+
+.logout-btn  { color: #f44336 !important; }
+.logout-btn mat-icon { color: #f44336; }
+
+/* Boutons auth */
+.auth-btn {
+  color: rgba(255,255,255,0.85) !important;
+  border-radius: 10px !important;
+  font-weight: 500 !important;
+  margin-left: 4px;
+}
+
+.auth-btn:hover {
+  color: white !important;
+  background: rgba(255,255,255,0.15) !important;
+}
+
+.register-btn {
+  background: white !important;
+  color: #667eea !important;
+  border-radius: 10px !important;
+  font-weight: 700 !important;
+  margin-left: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.register-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+}
+
+.main-content {
+  min-height: calc(100vh - 112px);
+  background: #f8f9fe;
+}
+
+.footer {
+  background: linear-gradient(135deg, #1a1a2e, #16213e);
+  color: rgba(255,255,255,0.6);
+  text-align: center;
+  padding: 20px;
+  font-size: 13px;
+}

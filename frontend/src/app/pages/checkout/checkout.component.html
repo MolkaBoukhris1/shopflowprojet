@@ -1,0 +1,139 @@
+<!-- src/app/pages/checkout/checkout.component.html -->
+
+<div class="page-container">
+
+  <h2 class="page-title">
+    <mat-icon>payment</mat-icon> Finaliser la commande
+  </h2>
+
+  <div class="checkout-layout">
+
+    <!-- ADRESSES DE LIVRAISON -->
+    <div class="address-section">
+      <mat-card class="form-card">
+        <mat-card-header>
+          <mat-card-title>Adresse de livraison</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+
+          <!-- Adresses existantes -->
+          <div class="address-list" *ngIf="addresses.length > 0 && !addingNew">
+            <div class="address-option"
+                 *ngFor="let addr of addresses"
+                 [class.selected]="selectedAddressId === addr.id"
+                 (click)="selectedAddressId = addr.id!">
+              <mat-icon>{{ addr.principal ? 'home' : 'location_on' }}</mat-icon>
+              <div class="addr-info">
+                <p class="addr-rue">{{ addr.rue }}</p>
+                <p class="addr-city">{{ addr.ville }}, {{ addr.codePostal }}, {{ addr.pays }}</p>
+                <span class="principal-badge" *ngIf="addr.principal">Principale</span>
+              </div>
+              <mat-icon class="check-icon" *ngIf="selectedAddressId === addr.id">
+                check_circle
+              </mat-icon>
+            </div>
+
+            <button mat-stroked-button class="add-address-btn"
+                    (click)="addingNew = true">
+              <mat-icon>add</mat-icon> Ajouter une adresse
+            </button>
+          </div>
+
+          <!-- Formulaire nouvelle adresse -->
+          <div *ngIf="addingNew || addresses.length === 0">
+            <p class="form-subtitle" *ngIf="addresses.length > 0">
+              Nouvelle adresse
+            </p>
+
+            <form [formGroup]="addressForm">
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Rue / Adresse complète</mat-label>
+                <input matInput formControlName="rue">
+                <mat-icon matSuffix>home</mat-icon>
+                <mat-error *ngIf="addressForm.get('rue')?.hasError('required')">Obligatoire</mat-error>
+              </mat-form-field>
+
+              <div class="two-col">
+                <mat-form-field appearance="outline">
+                  <mat-label>Ville</mat-label>
+                  <input matInput formControlName="ville">
+                  <mat-error *ngIf="addressForm.get('ville')?.hasError('required')">Obligatoire</mat-error>
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                  <mat-label>Code postal</mat-label>
+                  <input matInput formControlName="codePostal">
+                  <mat-error *ngIf="addressForm.get('codePostal')?.hasError('required')">Obligatoire</mat-error>
+                </mat-form-field>
+              </div>
+
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Pays</mat-label>
+                <input matInput formControlName="pays">
+              </mat-form-field>
+
+              <div class="addr-actions">
+                <button mat-stroked-button type="button"
+                        *ngIf="addresses.length > 0"
+                        (click)="addingNew = false">
+                  Annuler
+                </button>
+                <button mat-raised-button color="primary" type="button"
+                        [disabled]="addressForm.invalid"
+                        (click)="saveAddress()">
+                  <mat-icon>save</mat-icon> Enregistrer l'adresse
+                </button>
+              </div>
+            </form>
+          </div>
+
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <!-- RÉCAPITULATIF -->
+    <mat-card class="recap-card">
+      <mat-card-header>
+        <mat-card-title>Votre commande</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+
+        <div class="recap-item" *ngFor="let item of cart?.lignes">
+          <span>{{ item.product.nom }} ×{{ item.quantite }}</span>
+          <span>{{ ((item.product.prixPromo ?? item.product.prix) * item.quantite) | number:'1.2-2' }} TND</span>
+        </div>
+
+        <mat-divider style="margin: 12px 0"></mat-divider>
+
+        <div class="recap-row" *ngIf="remise > 0">
+          <span>Remise</span>
+          <span class="discount">- {{ remise | number:'1.2-2' }} TND</span>
+        </div>
+
+        <div class="recap-row">
+          <span>Frais de livraison</span>
+          <span>5.00 TND</span>
+        </div>
+
+        <mat-divider style="margin: 12px 0"></mat-divider>
+
+        <div class="recap-total">
+          <strong>Total TTC</strong>
+          <strong>{{ total | number:'1.2-2' }} TND</strong>
+        </div>
+
+      </mat-card-content>
+
+      <mat-card-actions>
+        <button mat-raised-button class="submit-btn"
+                [disabled]="!selectedAddressId || loading"
+                (click)="placeOrder()">
+          <mat-spinner diameter="22" *ngIf="loading"
+                       style="display:inline-block;margin-right:8px"></mat-spinner>
+          <mat-icon *ngIf="!loading">check_circle</mat-icon>
+          <span *ngIf="!loading">Confirmer la commande</span>
+        </button>
+      </mat-card-actions>
+    </mat-card>
+
+  </div>
+</div>

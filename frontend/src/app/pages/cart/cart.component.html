@@ -1,0 +1,148 @@
+<!-- src/app/pages/cart/cart.component.html -->
+
+<div class="page-container">
+
+  <h2 class="page-title">
+    <mat-icon>shopping_cart</mat-icon>
+    Mon panier
+    <span class="count" *ngIf="cart">
+      ({{ cart.lignes.length }} article(s))
+    </span>
+  </h2>
+
+  <!-- SPINNER -->
+  <div class="spinner-center" *ngIf="loading">
+    <mat-spinner></mat-spinner>
+  </div>
+
+  <!-- PANIER VIDE -->
+  <div class="empty-cart" *ngIf="!loading && cart && cart.lignes.length === 0">
+    <mat-icon>remove_shopping_cart</mat-icon>
+    <p>Votre panier est vide</p>
+    <button mat-raised-button class="shop-btn" routerLink="/produits">
+      <mat-icon>grid_view</mat-icon> Voir les produits
+    </button>
+  </div>
+
+  <!-- CONTENU -->
+  <div class="cart-layout" *ngIf="!loading && cart && cart.lignes.length > 0">
+
+    <!-- ARTICLES -->
+    <div class="cart-items">
+      <mat-card class="cart-item" *ngFor="let item of cart.lignes">
+
+        <img [src]="item.product.images || 'assets/no-image.png'"
+             [alt]="item.product.nom" class="item-img">
+
+        <div class="item-info">
+          <h3>{{ item.product.nom }}</h3>
+          <div class="cats-row">
+            <span class="cat-badge" *ngFor="let c of item.product.categories">
+              {{ c.nom }}
+            </span>
+          </div>
+          <p class="unit-price">
+            {{ (item.product.prixPromo ?? item.product.prix) | number:'1.2-2' }} TND / unité
+          </p>
+        </div>
+
+        <div class="item-controls">
+          <button mat-icon-button class="qty-btn"
+                  (click)="updateQty(item.id, item.quantite - 1)">
+            <mat-icon>remove</mat-icon>
+          </button>
+          <span class="qty">{{ item.quantite }}</span>
+          <button mat-icon-button class="qty-btn"
+                  (click)="updateQty(item.id, item.quantite + 1)">
+            <mat-icon>add</mat-icon>
+          </button>
+
+          <span class="subtotal">
+            {{ ((item.product.prixPromo ?? item.product.prix) * item.quantite) | number:'1.2-2' }} TND
+          </span>
+
+          <button mat-icon-button color="warn"
+                  (click)="removeItem(item.id)" matTooltip="Retirer">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+
+      </mat-card>
+
+      <!-- CODE PROMO -->
+      <mat-card class="coupon-card">
+        <mat-card-header>
+          <mat-card-title>Code promo</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="coupon-row" *ngIf="!cart.couponCode">
+            <mat-form-field appearance="outline" class="coupon-field">
+              <mat-label>Entrez votre code</mat-label>
+              <input matInput [(ngModel)]="couponCode"
+                     placeholder="Ex: PROMO10"
+                     style="text-transform: uppercase">
+              <mat-icon matSuffix>local_offer</mat-icon>
+            </mat-form-field>
+            <button mat-raised-button color="accent"
+                    (click)="applyCoupon()"
+                    [disabled]="!couponCode || applyingCoupon">
+              Appliquer
+            </button>
+          </div>
+
+          <div class="coupon-applied" *ngIf="cart.couponCode">
+            <mat-icon>check_circle</mat-icon>
+            <span>Code <strong>{{ cart.couponCode }}</strong> appliqué —
+              -{{ remise | number:'1.2-2' }} TND</span>
+            <button mat-icon-button color="warn" (click)="removeCoupon()"
+                    matTooltip="Retirer le code">
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <!-- RÉSUMÉ -->
+    <mat-card class="summary-card">
+      <mat-card-header>
+        <mat-card-title>Récapitulatif</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+
+        <div class="summary-row">
+          <span>Sous-total</span>
+          <span>{{ sousTotal | number:'1.2-2' }} TND</span>
+        </div>
+
+        <div class="summary-row discount" *ngIf="remise > 0">
+          <span>Remise ({{ cart?.couponCode }})</span>
+          <span>- {{ remise | number:'1.2-2' }} TND</span>
+        </div>
+
+        <div class="summary-row">
+          <span>Frais de livraison</span>
+          <span>{{ fraisLivraison | number:'1.2-2' }} TND</span>
+        </div>
+
+        <mat-divider style="margin: 12px 0"></mat-divider>
+
+        <div class="summary-total">
+          <strong>Total TTC</strong>
+          <strong>{{ total | number:'1.2-2' }} TND</strong>
+        </div>
+
+      </mat-card-content>
+
+      <mat-card-actions>
+        <button mat-raised-button class="checkout-btn" (click)="goToCheckout()">
+          <mat-icon>payment</mat-icon> Passer la commande
+        </button>
+        <button mat-stroked-button class="clear-btn" routerLink="/produits">
+          <mat-icon>arrow_back</mat-icon> Continuer mes achats
+        </button>
+      </mat-card-actions>
+    </mat-card>
+
+  </div>
+</div>

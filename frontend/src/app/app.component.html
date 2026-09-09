@@ -1,0 +1,113 @@
+<!-- src/app/app.component.html -->
+
+<mat-toolbar class="navbar">
+
+  <!-- Logo -->
+  <a routerLink="/produits" class="logo">
+    <mat-icon>storefront</mat-icon>
+    <span>ShopFlow</span>
+  </a>
+
+  <span class="spacer"></span>
+
+  <nav class="nav-links">
+
+    <!-- Tous les utilisateurs voient les produits -->
+    <a mat-button routerLink="/produits" routerLinkActive="active-link">
+      <mat-icon>grid_view</mat-icon> Produits
+    </a>
+
+    <!-- ADMIN seulement -->
+    <ng-container *ngIf="auth.isAdmin">
+      <a mat-button routerLink="/categories" routerLinkActive="active-link">
+        <mat-icon>category</mat-icon> Catégories
+      </a>
+      <a mat-button routerLink="/dashboard" routerLinkActive="active-link">
+        <mat-icon>dashboard</mat-icon> Dashboard
+      </a>
+    </ng-container>
+
+    <!-- SELLER seulement -->
+    <ng-container *ngIf="auth.isSeller">
+      <a mat-button routerLink="/product-form" routerLinkActive="active-link">
+        <mat-icon>add_box</mat-icon> Mes produits
+      </a>
+      <a mat-button routerLink="/dashboard" routerLinkActive="active-link">
+        <mat-icon>dashboard</mat-icon> Dashboard
+      </a>
+    </ng-container>
+
+    <!-- CUSTOMER seulement -->
+    <ng-container *ngIf="auth.isCustomer">
+      <a mat-button routerLink="/cart" routerLinkActive="active-link">
+        <mat-icon
+          [matBadge]="cartCount$ | async"
+          matBadgeColor="warn"
+          [matBadgeHidden]="(cartCount$ | async) === 0">
+          shopping_cart
+        </mat-icon>
+        Panier
+      </a>
+    </ng-container>
+
+  </nav>
+
+  <!-- Utilisateur connecté -->
+  <ng-container *ngIf="auth.isLoggedIn">
+
+    <!-- Badge rôle -->
+    <span class="role-badge" [class.admin]="auth.isAdmin"
+                             [class.seller]="auth.isSeller"
+                             [class.customer]="auth.isCustomer">
+      {{ auth.currentUser?.role }}
+    </span>
+
+    <button mat-icon-button [matMenuTriggerFor]="userMenu" matTooltip="Mon compte">
+      <mat-icon>account_circle</mat-icon>
+    </button>
+
+    <mat-menu #userMenu="matMenu">
+      <div class="user-header">
+        <mat-icon class="user-avatar">account_circle</mat-icon>
+        <div>
+          <p class="user-name">
+            {{ auth.currentUser?.prenom }} {{ auth.currentUser?.nom }}
+          </p>
+          <p class="user-role">{{ auth.currentUser?.role }}</p>
+          <p class="user-email">{{ auth.currentUser?.email }}</p>
+        </div>
+      </div>
+      <mat-divider></mat-divider>
+      <a mat-menu-item routerLink="/cart" *ngIf="auth.isCustomer">
+        <mat-icon>shopping_cart</mat-icon> Mon panier
+      </a>
+      <a mat-menu-item routerLink="/dashboard" *ngIf="auth.isAdminOrSeller">
+        <mat-icon>dashboard</mat-icon> Dashboard
+      </a>
+      <mat-divider></mat-divider>
+      <button mat-menu-item (click)="logout()" class="logout-btn">
+        <mat-icon>logout</mat-icon> Se déconnecter
+      </button>
+    </mat-menu>
+
+  </ng-container>
+
+  <!-- Non connecté -->
+  <ng-container *ngIf="!auth.isLoggedIn">
+    <a mat-button routerLink="/login" class="auth-btn">
+      <mat-icon>login</mat-icon> Connexion
+    </a>
+    <a mat-raised-button routerLink="/register" class="register-btn">
+      <mat-icon>person_add</mat-icon> S'inscrire
+    </a>
+  </ng-container>
+
+</mat-toolbar>
+
+<main class="main-content">
+  <router-outlet></router-outlet>
+</main>
+
+<footer class="footer">
+  <p>©  ShopFlow </p>
+</footer>

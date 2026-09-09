@@ -1,0 +1,47 @@
+/* src/app/pages/login/login.component.css */
+
+.auth-wrapper {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #3f51b5 0%, #283593 100%);
+  padding: 16px;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 430px;
+  padding: 32px;
+  border-radius: 16px !important;
+}
+
+.auth-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 24px;
+  color: #3f51b5;
+}
+.auth-logo mat-icon { font-size: 36px; width: 36px; height: 36px; }
+.auth-logo h2       { margin: 0; font-size: 26px; font-weight: 700; }
+
+.auth-title { text-align: center; font-size: 22px; font-weight: 600; margin: 0 0 4px; }
+.auth-sub   { text-align: center; color: #888; margin: 0 0 24px; font-size: 14px; }
+
+.full-width  { width: 100%; margin-bottom: 8px; }
+
+.submit-btn {
+  height: 50px;
+  font-size: 16px;
+  font-weight: 600;
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.redirect-txt { text-align: center; color: #666; font-size: 14px; margin: 0; }
+.redirect-txt a { color: #3f51b5; font-weight: 600; text-decoration: none; }
+.redirect-txt a:hover { text-decoration: underline; }

@@ -1,0 +1,61 @@
+/* src/app/pages/product-form/product-form.component.css */
+
+.page-container {
+  padding: 24px;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.form-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+.form-header h2 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.form-card {
+  border-radius: 12px !important;
+  padding: 8px;
+}
+
+.full-width {
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+
+.img-preview {
+  text-align: center;
+  margin: 8px 0 16px;
+}
+.img-preview img {
+  max-width: 100%;
+  max-height: 200px;
+  border-radius: 8px;
+  object-fit: cover;
+  border: 1px solid #e0e0e0;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #e0e0e0;
+}
+
+@media (max-width: 600px) {
+  .two-col { grid-template-columns: 1fr; }
+}

@@ -1,0 +1,137 @@
+<!-- src/app/pages/dashboard/dashboard.component.html -->
+
+<div class="page-container">
+
+  <h2 class="page-title">
+    <mat-icon>dashboard</mat-icon>
+    Tableau de bord
+    <span class="role-indicator" [class.admin]="auth.isAdmin" [class.seller]="auth.isSeller">
+      {{ auth.isAdmin ? 'ADMIN' : 'SELLER' }}
+    </span>
+  </h2>
+
+  <div class="spinner-center" *ngIf="loading">
+    <mat-spinner></mat-spinner>
+  </div>
+
+  <ng-container *ngIf="!loading && stats">
+
+    <!-- STAT CARDS -->
+    <div class="stats-grid">
+
+      <mat-card class="stat-card blue-card">
+        <mat-card-content>
+          <div class="stat-icon-wrap blue-wrap">
+            <mat-icon>inventory_2</mat-icon>
+          </div>
+          <div>
+            <p class="stat-val">{{ stats.totalProduits }}</p>
+            <p class="stat-lbl">Produits</p>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="stat-card green-card">
+        <mat-card-content>
+          <div class="stat-icon-wrap green-wrap">
+            <mat-icon>category</mat-icon>
+          </div>
+          <div>
+            <p class="stat-val">{{ stats.totalCategories }}</p>
+            <p class="stat-lbl">Catégories</p>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="stat-card orange-card">
+        <mat-card-content>
+          <div class="stat-icon-wrap orange-wrap">
+            <mat-icon>shopping_bag</mat-icon>
+          </div>
+          <div>
+            <p class="stat-val">{{ stats.totalCommandes }}</p>
+            <p class="stat-lbl">Commandes</p>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="stat-card purple-card">
+        <mat-card-content>
+          <div class="stat-icon-wrap purple-wrap">
+            <mat-icon>payments</mat-icon>
+          </div>
+          <div>
+            <p class="stat-val">{{ stats.chiffreAffaires | number:'1.2-2' }} TND</p>
+            <p class="stat-lbl">Chiffre d'affaires</p>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+    </div>
+
+    <!-- GRAPHIQUES -->
+    <div class="charts-grid">
+
+      <mat-card class="chart-card">
+        <span class="chart-title">Top produits vendus</span>
+        <mat-card-content>
+          <canvas baseChart [data]="barData" [options]="barOpts" type="bar"></canvas>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="chart-card">
+        <span class="chart-title">Commandes par statut</span>
+        <mat-card-content>
+          <canvas baseChart [data]="doughnutData" [options]="doughnutOpts" type="doughnut"></canvas>
+        </mat-card-content>
+      </mat-card>
+
+    </div>
+
+    <!-- COMMANDES RÉCENTES -->
+    <mat-card class="orders-card">
+      <mat-card-header>
+        <mat-card-title>Commandes récentes</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <table mat-table [dataSource]="stats.commandesRecentes" class="full-width">
+
+          <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef>#</th>
+            <td mat-cell *matCellDef="let o">{{ o.id }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="numero">
+            <th mat-header-cell *matHeaderCellDef>N° Commande</th>
+            <td mat-cell *matCellDef="let o">
+              <strong>{{ o.numeroCommande }}</strong>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="statut">
+            <th mat-header-cell *matHeaderCellDef>Statut</th>
+            <td mat-cell *matCellDef="let o">
+              <span class="status-badge" [class]="'s-' + o.statut">
+                {{ o.statut }}
+              </span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="total">
+            <th mat-header-cell *matHeaderCellDef>Total</th>
+            <td mat-cell *matCellDef="let o">{{ o.totalTTC | number:'1.2-2' }} TND</td>
+          </ng-container>
+
+          <ng-container matColumnDef="date">
+            <th mat-header-cell *matHeaderCellDef>Date</th>
+            <td mat-cell *matCellDef="let o">{{ o.dateCommande | date:'dd/MM/yyyy HH:mm' }}</td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="orderCols"></tr>
+          <tr mat-row *matRowDef="let row; columns: orderCols;"></tr>
+        </table>
+      </mat-card-content>
+    </mat-card>
+
+  </ng-container>
+</div>

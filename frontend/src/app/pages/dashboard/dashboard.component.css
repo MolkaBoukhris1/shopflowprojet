@@ -1,0 +1,32 @@
+/* src/app/pages/dashboard/dashboard.component.css */
+
+.page-container { padding: 24px; max-width: 1200px; margin: 0 auto; }
+.page-title { display:flex; align-items:center; gap:8px; font-size:24px; font-weight:600; margin-bottom:24px; }
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.stat-card mat-card-content {
+  display: flex; align-items: center; gap: 16px; padding: 20px;
+}
+.icon { font-size: 40px; width: 40px; height: 40px; }
+.blue   { color: #3f51b5; }
+.green  { color: #4caf50; }
+.orange { color: #ff9800; }
+.purple { color: #9c27b0; }
+.stat-val { font-size: 26px; font-weight: 700; margin: 0; }
+.stat-lbl { color: #666; font-size: 13px; margin: 4px 0 0; }
+
+.charts-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+.chart-card { padding: 8px; }
+
+.spinner-center { display:flex; justify-content:center; padding:80px; }
+
+@media (max-width: 768px) { .charts-grid { grid-template-columns: 1fr; } }

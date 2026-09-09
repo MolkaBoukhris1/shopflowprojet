@@ -1,0 +1,100 @@
+<!-- src/app/pages/product-form/product-form.component.html -->
+
+<div class="page-container">
+
+  <div class="form-header">
+    <button mat-icon-button class="back-btn" (click)="cancel()" matTooltip="Retour">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <h2>{{ isEdit ? 'Modifier le produit' : 'Ajouter un produit' }}</h2>
+  </div>
+
+  <mat-card class="form-card">
+    <mat-card-content>
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+        <!-- Nom -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Nom du produit</mat-label>
+          <input matInput formControlName="nom" placeholder="Ex: Laptop HP ProBook">
+          <mat-icon matSuffix>label</mat-icon>
+          <mat-error *ngIf="form.get('nom')?.hasError('required')">Obligatoire</mat-error>
+          <mat-error *ngIf="form.get('nom')?.hasError('minlength')">Min. 2 caractères</mat-error>
+        </mat-form-field>
+
+        <!-- Description -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Description</mat-label>
+          <textarea matInput formControlName="description" rows="4"></textarea>
+          <mat-error *ngIf="form.get('description')?.hasError('required')">Obligatoire</mat-error>
+        </mat-form-field>
+
+        <!-- Prix & Stock -->
+        <div class="two-col">
+          <mat-form-field appearance="outline">
+            <mat-label>Prix (TND)</mat-label>
+            <input matInput type="number" formControlName="prix" min="0" step="0.01">
+            <mat-icon matSuffix>attach_money</mat-icon>
+            <mat-error *ngIf="form.get('prix')?.hasError('required')">Obligatoire</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Prix promo (TND)</mat-label>
+            <input matInput type="number" formControlName="prixPromo" min="0" step="0.01">
+            <mat-icon matSuffix>local_offer</mat-icon>
+          </mat-form-field>
+        </div>
+
+        <div class="two-col">
+          <mat-form-field appearance="outline">
+            <mat-label>Stock disponible</mat-label>
+            <input matInput type="number" formControlName="stock" min="0">
+            <mat-icon matSuffix>inventory</mat-icon>
+            <mat-error *ngIf="form.get('stock')?.hasError('required')">Obligatoire</mat-error>
+          </mat-form-field>
+
+          <!-- Catégories multiples (ShopFlow = ManyToMany) -->
+          <mat-form-field appearance="outline">
+            <mat-label>Catégories</mat-label>
+            <mat-select formControlName="categoryIds" multiple>
+              <mat-option *ngFor="let c of categories" [value]="c.id">
+                {{ c.nom }}
+              </mat-option>
+            </mat-select>
+            <mat-icon matSuffix>category</mat-icon>
+            <mat-error *ngIf="form.get('categoryIds')?.hasError('required')">
+              Sélectionnez au moins une catégorie
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <!-- URL image -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>URL de l'image (optionnel)</mat-label>
+          <input matInput formControlName="images" placeholder="https://...">
+          <mat-icon matSuffix>image</mat-icon>
+        </mat-form-field>
+
+        <!-- Aperçu image -->
+        <div class="img-preview" *ngIf="form.get('images')?.value">
+          <img [src]="form.get('images')?.value" alt="Aperçu">
+        </div>
+
+        <!-- Boutons -->
+        <div class="form-actions">
+          <button mat-stroked-button type="button" class="cancel-btn" (click)="cancel()">
+            <mat-icon>close</mat-icon> Annuler
+          </button>
+          <button mat-raised-button type="submit" class="submit-btn"
+                  [disabled]="form.invalid || loading">
+            <mat-spinner diameter="20" *ngIf="loading"
+                         style="display:inline-block;margin-right:8px"></mat-spinner>
+            <mat-icon *ngIf="!loading">{{ isEdit ? 'save' : 'add' }}</mat-icon>
+            <span *ngIf="!loading">{{ isEdit ? 'Modifier' : 'Créer' }}</span>
+          </button>
+        </div>
+
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>
